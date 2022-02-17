@@ -20,7 +20,7 @@ class TodoBase(BaseModel):
   assigned_to: str
   due_date: str
   is_completed: bool
-  creator_id: int
+  # creator_id: int
 
 # For user who assigned task Display
 class User(BaseModel):

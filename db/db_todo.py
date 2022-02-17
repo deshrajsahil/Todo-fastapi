@@ -21,14 +21,14 @@ def create(db: Session, request: TodoBase):
 def get_all_todos(db: Session):
   return db.query(DbTodo).all()
 
-def delete(db: Session, id: int, user_id: int):
+def delete(db: Session, id: int ,user_id: int):
   todo = db.query(DbTodo).filter(DbTodo.id == id).first()
   if not todo:
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
           detail=f'ToDo with id {id} not found')
-  if todo.user_id != user_id:
+  """if todo.user_id != user_id:
     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
-          detail='Only todo creator can delete post')
+          detail='Only todo creator can delete post')"""
 
   db.delete(todo)
   db.commit()
