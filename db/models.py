@@ -1,7 +1,6 @@
-from datetime import date
 from sqlalchemy.sql.schema import ForeignKey
 from .database import Base
-from sqlalchemy import Column, Integer, String, Date
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 
 
@@ -11,7 +10,7 @@ class DbUser(Base):
   username = Column(String)
   email = Column(String)
   password = Column(String)
-  items = relationship('DbTodo', back_populates='user')
+  items = relationship('DbTodo', back_populates='usert')
 
 class DbTodo(Base):
   __tablename__ = 'todo'
@@ -19,7 +18,7 @@ class DbTodo(Base):
   task = Column(String)
   assigned_to = Column(String)
   is_completed = Column(String)
-  due_date = Column(Date)
+  due_date = Column(String)
   user_id = Column(Integer, ForeignKey('user.id'))
-  user = relationship('DbUser', back_populates='items')
+  usert = relationship('DbUser', back_populates='items')
 

@@ -10,8 +10,8 @@ def create(db: Session, request: TodoBase):
     task = request.task,
     assigned_to = request.assigned_to,
     due_date = request.due_date,
-    is_completed = request.caption,
-    user_id = request.creator_id
+    is_completed = request.is_completed,
+    # user_id = request.creator_id
   )
   db.add(new_todo)
   db.commit()

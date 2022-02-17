@@ -1,5 +1,5 @@
 from auth.oauth2 import get_current_user
-from fastapi import APIRouter, Depends, status, UploadFile, File
+from fastapi import APIRouter, Depends, status
 from fastapi.exceptions import HTTPException
 from sqlalchemy.orm import Session
 from routers.schemas import TodoBase, TodoDisplay

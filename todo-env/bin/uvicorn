@@ -1,5 +1,5 @@
 #!/bin/sh
-'''exec' "/Users/drs/Desktop/Practice cources/todo/todo-env/bin/python3" "$0" "$@"
+'''exec' "/Users/drs/Desktop/Practice courses/todo/todo-env/bin/python3" "$0" "$@"
 ' '''
 # -*- coding: utf-8 -*-
 import re

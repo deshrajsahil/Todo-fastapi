@@ -35,7 +35,7 @@ class TodoDisplay(BaseModel):
   assigned_to: str
   due_date: str
   is_completed: bool
-  user: User
+  # user: User
   class Config():
     orm_mode = True
 
