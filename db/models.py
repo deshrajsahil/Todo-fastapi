@@ -1,3 +1,4 @@
+from email.mime import base
 from sqlalchemy.sql.schema import ForeignKey
 from .database import Base
 from sqlalchemy import Column, Integer, String
@@ -10,7 +11,7 @@ class DbUser(Base):
   username = Column(String)
   email = Column(String)
   password = Column(String)
-  items = relationship('DbTodo', back_populates='usert')
+  # items = relationship('DbTodo', back_populates='usert')
 
 class DbTodo(Base):
   __tablename__ = 'todo'
@@ -20,5 +21,9 @@ class DbTodo(Base):
   is_completed = Column(String)
   due_date = Column(String)
   user_id = Column(Integer, ForeignKey('user.id'))
-  usert = relationship('DbUser', back_populates='items')
+  grp_txt = Column(String)
+  grp_id = Column(Integer, nullable=True)
+  # usert = relationship('DbUser', back_populates='items')
 
+# class DbTodoGrp(Base):
+#   __tablename__ = 'grouptodo'

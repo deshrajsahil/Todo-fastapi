@@ -1,6 +1,8 @@
 from pydantic import BaseModel
 from datetime import date
-from typing import List
+from typing import List, Optional
+
+from sqlalchemy import false
 
 
 class UserBase(BaseModel):
@@ -18,9 +20,11 @@ class UserDisplay(BaseModel):
 class TodoBase(BaseModel):
   task: str
   assigned_to: str
-  due_date: str
-  is_completed: bool
-  # creator_id: int
+  due_date: date
+  is_completed: Optional[bool]='false'
+  creator_id: Optional[int] = ''
+  grp_txt: Optional[str] = ''
+  grp_id: Optional[int] = ''
 
 # For user who assigned task Display
 class User(BaseModel):
@@ -33,8 +37,10 @@ class TodoDisplay(BaseModel):
   id: int
   task: str
   assigned_to: str
-  due_date: str
+  due_date: date
   is_completed: bool
+  grp_txt: str
+  grp_id: int
   # user: User
   class Config():
     orm_mode = True
@@ -43,4 +49,25 @@ class UserAuth(BaseModel):
   id: int
   username: str
   email: str
+
+
+# update todo
+class Update_TodoBase(BaseModel):
+  id: int
+  task: str
+  assigned_to: str
+  due_date: str
+  is_completed: bool
+  creator_id: int
+
+
+class Update_TodoDisplay(BaseModel):
+  id: int
+  task: str
+  assigned_to: str
+  due_date: str
+  is_completed: bool
+  creator_id: int
+  class Config():
+    orm_mode = True
 
