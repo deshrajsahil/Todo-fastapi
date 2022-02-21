@@ -25,5 +25,4 @@ class DbTodo(Base):
   grp_id = Column(Integer, nullable=True)
   # usert = relationship('DbUser', back_populates='items')
 
-# class DbTodoGrp(Base):
-#   __tablename__ = 'grouptodo'
+
