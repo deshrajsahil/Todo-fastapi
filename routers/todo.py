@@ -29,14 +29,25 @@ def todos(db: Session = Depends(get_db)):
   return db_todo.get_all_todos(db)
 
 @router.put('/update/{id}',response_model=Update_TodoDisplay)
-def update_todo(id: int,request: Update_TodoBase, db: Session = Depends(get_db)):#, current_user: UserAuth = Depends(get_current_user)):
+def update_todo(id: int,request: Update_TodoBase, db: Session = Depends(get_db), current_user: UserAuth = Depends(get_current_user)):
   if not id:
     raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, 
               detail="ID cannot be Empty")
   if not request.task:
     raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, 
               detail="Task cannot be Empty")
-  return db_todo.update_todo(id, db, request)#,current_user.id,request)
+  return db_todo.update_todo(id, db, request,current_user.id)
+
+
+@router.put('/update_workdone/{id}', response_model=Update_TodoDisplay)
+def update_workdone_todo(id: int, request:Upadate_Work , db: Session = Depends(get_db), current_user: UserAuth = Depends(get_current_user)):
+  return db_todo.update_workdone(id,db,request)
+
+
+# @router.put('/mark_all_complete/{id}', response_model=Update_TodoDisplay)
+# def mark_all_grp_complete(id: int, db: Session = Depends(get_db)):#, current_user: UserAuth = Depends(get_current_user)):
+#   return db_todo.mark_grp_complete(id,db)
+
 
 
 @router.get('/delete/{id}')

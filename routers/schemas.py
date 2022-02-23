@@ -55,12 +55,10 @@ class UserAuth(BaseModel):
 
 # update todo
 class Update_TodoBase(BaseModel):
-  # id: int
   task: str
   assigned_to: str
   due_date: date
   is_completed: Optional[bool]='false'
-  # creator_id: int
   grp_txt: Optional[str] = ''
   grp_id: Optional[int] = ''
 
