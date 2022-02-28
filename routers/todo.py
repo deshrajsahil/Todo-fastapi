@@ -1,8 +1,10 @@
+from http.client import responses
+from urllib import response
 from auth.oauth2 import get_current_user
 from fastapi import APIRouter, Depends, status
 from fastapi.exceptions import HTTPException
 from sqlalchemy.orm import Session
-from routers.schemas import TodoBase, TodoDisplay, Update_TodoBase,Upadate_Work, Update_TodoDisplay
+from routers.schemas import TodoBase, TodoDisplay, Update_TodoBase,Upadate_Work, Update_TodoDisplay, Groupwise_Task, Task_Inside_Display
 from db.database import get_db
 from db import db_todo
 from typing import List
@@ -59,3 +61,20 @@ def delete_todo_grp(grp_id: int, db: Session = Depends(get_db), current_user: Us
 @router.get('/passed_due_date', response_model=List[TodoDisplay])
 def display_passsed_due_date(db: Session = Depends(get_db)):
   return db_todo.get_all_passed_due_date(db)
+
+
+@router.get('/groupwise_task/{id}', response_model = List[Groupwise_Task])
+def display_task_groupwiwise(id:int, db: Session=Depends(get_db)):
+  print("id: ", id)
+  x = db_todo.groupwise_task(id, db)
+  print("x", x)
+  return x
+
+
+# @router.get(
+#   '/groupwise_task/{id}',
+#   response_model=Groupwise_Task,List[Task_Inside_Display]
+# )
+# def display_task_groupwiwise(id:int, db: Session=Depends(get_db)):
+#   return db_todo.groupwise_task(id, db)
+

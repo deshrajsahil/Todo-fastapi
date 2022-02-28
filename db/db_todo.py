@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import HTTPException, status
 from routers.schemas import TodoBase, Update_TodoBase, Upadate_Work, Update_TodoDisplay
 from sqlalchemy.orm.session import Session
@@ -5,6 +6,7 @@ from db.models import DbTodo
 from sqlalchemy.orm import Query
 from sqlalchemy import update
 from datetime import date
+from routers.schemas import Task_Inside_Display
 
 
 def create_todo(db: Session, request: TodoBase, creator_id: int):
@@ -23,7 +25,10 @@ def create_todo(db: Session, request: TodoBase, creator_id: int):
   return new_todo
 
 def get_all_todos(db: Session):
-  return db.query(DbTodo).all()
+  x = db.query(DbTodo).all()
+  print("x : ", x)
+
+  return x
 
 def update_todo(id: int, db: Session, request:Update_TodoBase, current_user: int):
   u_id = db.query(DbTodo).filter(DbTodo.id == id).first()
@@ -97,3 +102,19 @@ def get_all_passed_due_date(db: Session):
   p_todo=[]
   p_todo = db.query(DbTodo).filter(DbTodo.due_date < today ).all()
   return p_todo
+
+def groupwise_task(g_id:int, db: Session):
+  g_w_todo = []
+  g_w_todo = db.query(DbTodo).filter(DbTodo.grp_id == g_id ).all()
+  # # g_w_todo.to_json
+  # y = Task_Inside_Display(g_w_todo)
+  # print("g_w_todo : ", g_w_todo)
+  # r = {
+  #   "grp_id": f"{g_id}",
+  #   # "grp_txt": f"{DbTodo.grp_txt}",
+  #   # "tasks": y
+  #   "tasks": f"{g_w_todo}"
+  # }
+  # print("R: ", r)
+  r = g_w_todo
+  return r
