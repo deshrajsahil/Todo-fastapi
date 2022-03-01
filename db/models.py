@@ -16,7 +16,7 @@ class DbUser(Base):
 class Dbgrp(Base):
   __tablename__ = 'grp'
   g_id = Column(Integer, primary_key=True)
-  g_txt = Column(String)
+  g_name = Column(String)
 
 
 class DbTodo(Base):
@@ -25,9 +25,9 @@ class DbTodo(Base):
   task = Column(String)
   assigned_to = Column(String)
   is_completed = Column(String)
-  due_date = Column(Date)
+  due_date = Column(String)
   user_id = Column(Integer, ForeignKey('user.id'))
-  # grp_txt = Column(String)
-  grp_id = Column(Integer, ForeignKey('grp.g_id'))
+  grp_name = Column(String, ForeignKey('grp.g_id'))
+  # grp_id = Column(Integer, ForeignKey('grp.g_id'))
   # usert = relationship('DbUser', back_populates='items')
 
