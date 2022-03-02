@@ -10,8 +10,8 @@ from routers.schemas import UserAuth
 
 
 router = APIRouter(
-  prefix='/post',
-  tags=['post']
+  prefix='/todo',
+  tags=['todo']
 )
 
 
@@ -44,10 +44,6 @@ def update_workdone_todo(id: int, request:Upadate_Work , db: Session = Depends(g
   return db_todo.update_workdone(id,db,request)
 
 
-# @router.put('/mark_all_complete/{id}', response_model=Update_TodoDisplay)
-# def mark_all_grp_complete(id: int, db: Session = Depends(get_db)):#, current_user: UserAuth = Depends(get_current_user)):
-#   return db_todo.mark_grp_complete(id,db)
-
 
 
 @router.get('/delete/{id}')
@@ -59,3 +55,7 @@ def delete_todo(id: int, db: Session = Depends(get_db), current_user: UserAuth =
 def delete_todo_grp(grp_id: int, db: Session = Depends(get_db), current_user: UserAuth = Depends(get_current_user)):
   return db_todo.delete_grp(db, grp_id,current_user.id)
 
+
+@router.get('/passed_due_date', response_model=List[TodoDisplay])
+def display_passsed_due_date(db: Session = Depends(get_db)):
+  return db_todo.get_all_passed_due_date(db)

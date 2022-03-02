@@ -10,7 +10,7 @@ router = APIRouter(
   tags=['authentication']
 )
 
-@router.post('/login')
+@router.post('/login')      # '/login' has to be same which is in oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login") in oauth2
 def login(request: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
   user = db.query(DbUser).filter(DbUser.username == request.username).first()
   if not user:

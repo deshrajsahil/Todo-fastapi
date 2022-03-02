@@ -4,7 +4,7 @@ from sqlalchemy.orm.session import Session
 from db.models import DbTodo
 from sqlalchemy.orm import Query
 from sqlalchemy import update
-
+from datetime import date
 
 
 def create_todo(db: Session, request: TodoBase, creator_id: int):
@@ -59,18 +59,6 @@ def update_workdone(id: int, db: Session, request:Upadate_Work):
   return u_work
 
 
-# def mark_grp_complete(grp_id: int, db: Session):#,user_id: int):
-#   markall = []
-#   markall = db.query(DbTodo).filter(DbTodo.grp_id == grp_id).all() 
-#   if not markall:
-#     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
-#           detail=f'ToDo with group id {grp_id} not found')
-#   for x in markall:
-#     db.query(DbTodo).filter(DbTodo.id == x.id).update({
-#     "is_completed" : u"true"
-#     })
-#   return markall
-
 def delete(db: Session, id: int,user_id: int):
   todo = db.query(DbTodo).filter(DbTodo.id == id).first()
   if not todo:
@@ -103,3 +91,9 @@ def delete_grp(db: Session, grp_id: int,user_id: int):
     return 'Some tasks were not deleted bcoz it has been created by others'
   else:
     return '---Group is deleted---'   
+
+def get_all_passed_due_date(db: Session):
+  today = date.today()
+  p_todo=[]
+  p_todo = db.query(DbTodo).filter(DbTodo.due_date < today ).all()
+  return p_todo
