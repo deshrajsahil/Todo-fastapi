@@ -5,10 +5,9 @@ from routers.schemas import TodoBase, TodoGrpBase , Update_TodoBase, Upadate_Wor
 from sqlalchemy.orm.session import Session
 from db.models import DbTodo , Dbgrp
 from sqlalchemy.orm import Query
-from sqlalchemy import update
+from sqlalchemy import or_, update
 from datetime import date
-
-
+import slack
 
 
 def create_todo_grp(db: Session, request: TodoGrpBase, creator_id: int):
@@ -42,6 +41,14 @@ def create_todo(db: Session, request: TodoBase, creator_id: int):
   db.add(new_todo)
   db.commit()
   db.refresh(new_todo)
+  t = {
+      "task": request.task,
+      "assigned_to": request.assigned_to,
+      "due_date": request.due_date,
+      "is_completed": request.is_completed,
+      "grp_name": request.grp_name
+    }
+  slack.task(t)
   return new_todo
 
 def get_all_todos(db: Session):
@@ -143,7 +150,7 @@ def delete_grp(db: Session, grp_name: str):#,current_user.id)
 def get_all_passed_due_date(db: Session):
   today = date.today()
   p_todo=[]
-  p_todo = db.query(DbTodo).filter(DbTodo.due_date < today).filter( DbTodo.is_completed == 0).all()
+  p_todo = db.query(DbTodo).filter(DbTodo.due_date < today).filter( or_(DbTodo.is_completed == 0, DbTodo.is_completed == 'false', DbTodo.is_completed == 'False')).all()
   return p_todo
 
 
@@ -184,4 +191,32 @@ def groupwise_task(g_name:str, db: Session):
   return r
   
 
+def nofify_due_date_passed(db: Session):
+  today = date.today()
+  p_todo=[]
+  p_todo = db.query(DbTodo).filter(DbTodo.due_date < today).filter( or_(DbTodo.is_completed == 0, DbTodo.is_completed == 'false', DbTodo.is_completed == 'False')).all()
+  for x in p_todo:
+    p=f"{x.assigned_to}, your due date has been passed and your task is not completed till now!!"
+    slack.task(p)
 
+l=[]
+def get_today_values(db: Session):
+  print('inside get today value in dbtodo')
+  t=[]
+  t = db.query(DbTodo).filter(DbTodo.due_date == date.today()).filter( or_(DbTodo.is_completed == 0, DbTodo.is_completed == 'false', DbTodo.is_completed == 'False')).all()
+  l = t
+
+
+def today_due_date(db: Session):
+  today = date.today()
+  p_todo=[]
+  p_todo = db.query(DbTodo).filter(DbTodo.due_date == today).filter( or_(DbTodo.is_completed == 0, DbTodo.is_completed == 'false', DbTodo.is_completed == 'False')).all()
+  print('inside today due date in dbtodo')
+  # t=l
+  for x in p_todo:
+    p=f"{x.assigned_to}, REMINDER!! Today is due date for task {x.task} assigned to {x.assigned_to} and the task is not completed yet...!!! "
+    slack.task(p)
+  # return p_todo
+  # a="Reminder!!"
+  # slack.task(a)
+  # print(a)

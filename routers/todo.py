@@ -1,5 +1,3 @@
-from http.client import responses
-from urllib import request, response
 from auth.oauth2 import get_current_user
 from fastapi import APIRouter, Depends, status
 from fastapi.exceptions import HTTPException
@@ -9,6 +7,10 @@ from db.database import get_db
 from db import db_todo
 from typing import List
 from routers.schemas import UserAuth
+from apscheduler.schedulers.background import BackgroundScheduler
+import time
+import os
+
 
 
 router = APIRouter(
@@ -19,6 +21,7 @@ router = APIRouter(
 
 @router.post('', response_model=TodoGrpDisplay)
 def create_todo_grp(request: TodoGrpBase, db: Session = Depends(get_db), creator_id: UserAuth = Depends(get_current_user)):
+  print(request.g_name)
   if not request.g_name:
     raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, 
               detail="Group text cannot be Empty")
@@ -86,5 +89,35 @@ def display_task_groupwiwise(grp_name:str, db: Session=Depends(get_db)):
   # print("x", x)
   return x
 
+@router.get('/notify_due_date_passed')
+def nofify_due_date_passed(db: Session = Depends(get_db)):
+  return db_todo.nofify_due_date_passed(db)
 
 
+# @router.get('/today_due_date')
+def today_due_date(db: Session ):#= Depends(get_db)):
+  # t = await db_todo.today_due_date(db)
+  print('inside today due date in todo')
+  db_todo.today_due_date(db)#db)
+  # return db_todo.today_due_date(db)
+
+
+def due_today():
+  print('inside due today in todo')
+  db: Session = Depends(get_db)
+  db_todo.get_today_values(db)
+  # return p
+  
+# if __name__ == '__main__':
+#     scheduler = BackgroundScheduler()
+#     scheduler.add_job(today_due_date, 'interval', seconds=3)
+#     scheduler.start()
+#     print('Press Ctrl+{0} to exit'.format('Break' if os.name == 'nt' else 'C'))
+
+#     try:
+#         # This is here to simulate application activity (which keeps the main thread alive).
+#         while True:
+#             time.sleep(2)
+#     except (KeyboardInterrupt, SystemExit):
+#         # Not strictly necessary if daemonic mode is enabled but should be done if possible
+#         scheduler.shutdown()
