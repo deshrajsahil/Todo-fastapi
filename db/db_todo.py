@@ -8,6 +8,7 @@ from sqlalchemy.orm import Query
 from sqlalchemy import or_, update
 from datetime import date
 import slack
+from db.database import db_session
 
 
 def create_todo_grp(db: Session, request: TodoGrpBase, creator_id: int):
@@ -208,6 +209,7 @@ def get_today_values(db: Session):
 
 
 def today_due_date(db: Session):
+  db = db_session.get()
   today = date.today()
   p_todo=[]
   p_todo = db.query(DbTodo).filter(DbTodo.due_date == today).filter( or_(DbTodo.is_completed == 0, DbTodo.is_completed == 'false', DbTodo.is_completed == 'False')).all()

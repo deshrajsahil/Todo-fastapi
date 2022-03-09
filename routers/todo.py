@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, status
 from fastapi.exceptions import HTTPException
 from sqlalchemy.orm import Session
 from routers.schemas import TodoBase, TodoDisplay, TodoGrpBase, TodoGrpDisplay , Update_TodoBase , Update_TodoDisplay, Upadate_Work, Groupwise_Task, Task_Inside_Display
-from db.database import get_db
+from db.database import get_db, db_session
 from db import db_todo
 from typing import List
 from routers.schemas import UserAuth
@@ -94,11 +94,12 @@ def nofify_due_date_passed(db: Session = Depends(get_db)):
   return db_todo.nofify_due_date_passed(db)
 
 
-# @router.get('/today_due_date')
-def today_due_date(db: Session ):#= Depends(get_db)):
+@router.get('/today_due_date')
+def today_due_date(db: Session = Depends(get_db)):
+  db_session.set(db)
   # t = await db_todo.today_due_date(db)
   print('inside today due date in todo')
-  db_todo.today_due_date(db)#db)
+  db_todo.today_due_date(db)
   # return db_todo.today_due_date(db)
 
 
@@ -108,16 +109,3 @@ def due_today():
   db_todo.get_today_values(db)
   # return p
   
-# if __name__ == '__main__':
-#     scheduler = BackgroundScheduler()
-#     scheduler.add_job(today_due_date, 'interval', seconds=3)
-#     scheduler.start()
-#     print('Press Ctrl+{0} to exit'.format('Break' if os.name == 'nt' else 'C'))
-
-#     try:
-#         # This is here to simulate application activity (which keeps the main thread alive).
-#         while True:
-#             time.sleep(2)
-#     except (KeyboardInterrupt, SystemExit):
-#         # Not strictly necessary if daemonic mode is enabled but should be done if possible
-#         scheduler.shutdown()

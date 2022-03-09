@@ -45,30 +45,6 @@ import uvicorn
 # def root():
 #     return "hello world!!"
 
-def st(db: Session = Depends(get_db)):
-  # t=[]
-  todo.today_due_date(db)
-  # print('inside st...')
-  # today = date.today()
-  # t = Session.query(DbTodo).filter(DbTodo.due_date == today).filter( or_(DbTodo.is_completed == 0, DbTodo.is_completed == 'false', DbTodo.is_completed == 'False')).all()
-  # for x in t:
-  #   p=f"{x.assigned_to}, REMINDER!! Today is due date for task {x.task} assigned to {x.assigned_to} and the task is not completed yet...!!! "
-  #   slack.task(p)
-
-
-# if __name__ == '__main__':
-#     scheduler = BackgroundScheduler()
-#     scheduler.add_job(st, 'interval', seconds=3)
-#     scheduler.start()
-#     print('Press Ctrl+{0} to exit'.format('Break' if os.name == 'nt' else 'C'))
-
-#     try:
-#         # This is here to simulate application activity (which keeps the main thread alive).
-#         while True:
-#             time.sleep(2)
-#     except (KeyboardInterrupt, SystemExit):
-#         # Not strictly necessary if daemonic mode is enabled but should be done if possible
-#         scheduler.shutdown()
 
 
 # models.Base.metadata.create_all(engine)
@@ -89,6 +65,16 @@ scheduler = BackgroundScheduler()
 app.include_router(user.router)
 app.include_router(todo.router)
 app.include_router(authentication.router)
+
+def st():#db: Session = Depends(get_db)):
+  # t=[]
+  # todo.today_due_date()
+  print('inside st...')
+  # today = date.today()
+  # t = Session.query(DbTodo).filter(DbTodo.due_date == today).filter( or_(DbTodo.is_completed == 0, DbTodo.is_completed == 'false', DbTodo.is_completed == 'False')).all()
+  # for x in t:
+  #   p=f"{x.assigned_to}, REMINDER!! Today is due date for task {x.task} assigned to {x.assigned_to} and the task is not completed yet...!!! "
+  #   slack.task(p)
 
 @app.on_event("startup")
 def scheduled_migration():

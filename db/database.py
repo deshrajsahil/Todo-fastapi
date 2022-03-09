@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
+from contextvars import ContextVar
  
 SQLALCHEMY_DATABASE_URL = 'sqlite:///./todo_api.db'
  
@@ -23,3 +24,8 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+db_session: ContextVar[Session] = ContextVar('db_session')
+# a = get_db()
+# dir(a)
