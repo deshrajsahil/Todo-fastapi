@@ -22,7 +22,6 @@ class TodoBase(BaseModel):
   assigned_to: str
   due_date: date
   is_completed: Optional[bool]='false'
-  creator_id: Optional[int] = ''
   grp_txt: Optional[str] = ''
   grp_id: Optional[int] = ''
 
@@ -45,6 +44,9 @@ class TodoDisplay(BaseModel):
   class Config():
     orm_mode = True
 
+class Upadate_Work(BaseModel):
+  is_completed: Optional[bool]='false'
+
 class UserAuth(BaseModel):
   id: int
   username: str
@@ -53,21 +55,24 @@ class UserAuth(BaseModel):
 
 # update todo
 class Update_TodoBase(BaseModel):
-  id: int
   task: str
   assigned_to: str
-  due_date: str
-  is_completed: bool
-  creator_id: int
+  due_date: date
+  is_completed: Optional[bool]='false'
+  grp_txt: Optional[str] = ''
+  grp_id: Optional[int] = ''
+
 
 
 class Update_TodoDisplay(BaseModel):
   id: int
   task: str
   assigned_to: str
-  due_date: str
+  due_date: date
   is_completed: bool
-  creator_id: int
+  user_id: int
+  grp_txt: str
+  grp_id: int
   class Config():
     orm_mode = True
 
